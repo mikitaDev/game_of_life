@@ -7,7 +7,7 @@ GENERATIONS = 10
 SIZE = 5
 
 def create_map(size: int = SIZE) -> List[List[bool]]:
-    return [[choice([1,0]) for _ in range (SIZE)] for _ in range(SIZE)]
+    return [[choice([True,False]) for _ in range (SIZE)] for _ in range(SIZE)]
 
 def show_map ( map_ : List[List[bool]]) :
     print("##################")
@@ -18,44 +18,30 @@ def get_neighbours(map_, coordinate_row, coordinate_column) -> int:
     # 1 2 3
     # 4 * 6
     # 7 8 9
-    if( coordinate_row != 0 and coordinate_column != 0 and map_[coordinate_row - 1][coordinate_column - 1] == 1):
-        count += 1
-        
-    if(coordinate_row != 0 and coordinate_column != SIZE -1 and map_[coordinate_row - 1][coordinate_column + 1] == 1):
-        count += 1
-            
-    if( coordinate_row != 0 and map_[coordinate_row - 1][coordinate_column] == 1 ):
-        count += 1
-    ############################
-    if(coordinate_column != SIZE -1 and map_[coordinate_row][coordinate_column + 1] == 1 ):
-        count += 1
-           
-    if(coordinate_column != 0 and  map_[coordinate_row][coordinate_column - 1] == 1):
-        count += 1
-
-    #############################
-    if(coordinate_row != SIZE -1 and coordinate_column != SIZE -1 and map_[coordinate_row + 1][coordinate_column + 1] == 1):
-        count += 1
-
-    if(coordinate_row != SIZE -1  and coordinate_column != 0 and  map_[coordinate_row + 1][coordinate_column - 1] == 1):
-        count += 1
-        
-    if(coordinate_row != SIZE -1 and  map_[coordinate_row + 1][coordinate_column] == 1):
-        count += 1
-        
+    for row in range(coordinate_row - 1, coordinate_row + 2):
+            for column in range(coordinate_column - 1, coordinate_column + 2):
+                if row < 0 or column < 0:
+                    continue
+                if row == coordinate_row and column == coordinate_column:
+                    continue
+                if row >= SIZE or column >= SIZE:
+                    continue
+                count+=map_[row][column]
     return count
 
 def update_map(old_map : List[List[bool]]) -> List[List[bool]]:
     
-    new_map = [[0 for _ in range(SIZE)] for _ in range(SIZE)]
-               
+    new_map = old_map.copy()
+                   
     for row in range(SIZE):
         for column in range(SIZE):
             count = get_neighbours(old_map,row,column)
-            if(count == 2 or count == 3):
-                new_map[row][column] = 1
-            else:
-                new_map[row][column] = 0
+            if count == 2 or count == 3 and old_map[row][column]:
+                new_map[row][column] = True
+            elif not old_map[row][column] and count == 3:
+                new_map[row][column] = False
+            else :
+                new_map[row][column] = False
     return new_map
             
 

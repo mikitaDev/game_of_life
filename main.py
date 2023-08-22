@@ -1,23 +1,27 @@
 from pprint import pprint
 from random import choice
 from typing import List
+import matplotlib.pyplot as plt
 
 #const 
-GENERATIONS = 10
-SIZE = 5
+GENERATIONS = 100
+SIZE = 100
+
+fig, ax = plt.subplots()
 
 def create_map(size: int = SIZE) -> List[List[bool]]:
     return [[choice([True,False]) for _ in range (SIZE)] for _ in range(SIZE)]
 
 def show_map ( map_ : List[List[bool]]) :
-    print("##################")
-    pprint(map_)
+    plt.ion()
+    ax.clear()
+    ax.imshow(map_, cmap='viridis')
+    plt.draw()
+    plt.pause(0.5)
+    plt.ioff()
     
 def get_neighbours(map_, coordinate_row, coordinate_column) -> int:
     count = 0
-    # 1 2 3
-    # 4 * 6
-    # 7 8 9
     for row in range(coordinate_row - 1, coordinate_row + 2):
             for column in range(coordinate_column - 1, coordinate_column + 2):
                 if row < 0 or column < 0:
@@ -49,6 +53,7 @@ if __name__ == '__main__':
     current_map = create_map()
     
     # start
+
     print("start filed")
     show_map(current_map)
     
@@ -56,4 +61,5 @@ if __name__ == '__main__':
         print("iteration = ", count)
         current_map = update_map(current_map)
         show_map(current_map)
+    plt.show()
 

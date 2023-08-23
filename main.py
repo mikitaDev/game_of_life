@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 #const 
 GENERATIONS = 100
-SIZE = 100
+SIZE = 50
 
 fig, ax = plt.subplots()
 
@@ -40,12 +40,10 @@ def update_map(old_map : List[List[bool]]) -> List[List[bool]]:
     for row in range(SIZE):
         for column in range(SIZE):
             count = get_neighbours(old_map,row,column)
-            if count == 2 or count == 3 and old_map[row][column]:
-                new_map[row][column] = True
+            if count not in [2,3] and old_map[row][column]:
+                new_map[row][column] = False
             elif not old_map[row][column] and count == 3:
-                new_map[row][column] = False
-            else :
-                new_map[row][column] = False
+                new_map[row][column] = True
     return new_map
             
 
